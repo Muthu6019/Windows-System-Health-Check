@@ -1,0 +1,62 @@
+@echo off
+title Windows System Health Check
+color 0A
+
+:: Set report file location
+set REPORT=%USERPROFILE%\Desktop\System_Health_Report.txt
+
+echo ============================================= > %REPORT%
+echo        WINDOWS SYSTEM HEALTH REPORT           >> %REPORT%
+echo ============================================= >> %REPORT%
+echo Generated on: %DATE% %TIME% >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking System Information...
+echo ===== SYSTEM INFORMATION ===== >> %REPORT%
+systeminfo >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Disk Status...
+echo ===== DISK STATUS ===== >> %REPORT%
+wmic logicaldisk get caption,description,freespace,size >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Disk Errors (C:)...
+echo ===== CHKDSK (C:) ===== >> %REPORT%
+chkdsk C: >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Memory Usage...
+echo ===== MEMORY STATUS ===== >> %REPORT%
+wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /Value >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Running Processes...
+echo ===== TOP RUNNING PROCESSES ===== >> %REPORT%
+tasklist >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Network Configuration...
+echo ===== NETWORK CONFIGURATION ===== >> %REPORT%
+ipconfig /all >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Internet Connectivity...
+echo ===== INTERNET TEST (Google Ping) ===== >> %REPORT%
+ping google.com -n 4 >> %REPORT%
+echo. >> %REPORT%
+
+echo Checking Windows Updates Service...
+echo ===== WINDOWS UPDATE SERVICE ===== >> %REPORT%
+sc query wuauserv >> %REPORT%
+echo. >> %REPORT%
+
+echo ============================================= >> %REPORT%
+echo        HEALTH CHECK COMPLETE                  >> %REPORT%
+echo ============================================= >> %REPORT%
+
+echo.
+echo System Health Check Complete!
+echo Report saved to:
+echo %REPORT%
+pause
